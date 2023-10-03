@@ -25,7 +25,7 @@ In the future I may link my own API from MTA.
 # Legend
 ▲: Uptown/Manhattan
 
-▼: Downtoan/Brooklyn
+▼: Downtown/Brooklyn
 
 Just remember that Manhattan is the core of NYC Subway.
 
@@ -72,7 +72,7 @@ You can see them in the beginning.
 
 Edit the variable myF1/myF2/myF3.
 
-For example:
+🔍For example:
 
 let myF1="**(40.6922632, -73.9868766)**" //default: Jay St MetroTech
 
@@ -104,9 +104,9 @@ let myF1="**(40.6922632, -73.9868766)**" //default: Jay St MetroTech
 <img style="border-radius: 10px; box-shadow: 2px 2px 5px #888;" src="Screenshot.jpeg" alt="截图" width="567" >
 
 # 图例
-▲: 上城/曼哈顿
+▲: 上城/曼哈顿（Uptown/Manhattan）
 
-▼: 下城/布鲁克林
+▼: 下城/布鲁克林（Downtown/Brooklyn）
 
 始终记住曼哈顿是纽约地铁的核心。
 
@@ -152,7 +152,7 @@ let myF1="**(40.6922632, -73.9868766)**" //default: Jay St MetroTech
 
 编辑变量myF1/myF2/myF3。
 
-例如：
+🌰例如：
 
 let myF1="**(40.6922632, -73.9868766)**" //默认：Jay St MetroTech
 
