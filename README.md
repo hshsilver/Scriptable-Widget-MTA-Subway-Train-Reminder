@@ -80,6 +80,7 @@ let myF1="**(40.6922632, -73.9868766)**" //default: Jay St MetroTech
  - Subject to the system limit, the widget might **NOT** fresh the content as soon as we want. You can click to refresh.
  - The good news is the timer you see shows the relative time to the last refresh time which will help you refer to offset by calculating.
  - Pay attention! Since we simplify the directions, so you **CANNOT** see the difference of multiple terminal destinations. For example, A train may have multiple terminal stations including Ozone Park–Lefferts Blvd and Far Rockaway-Mott Av. Sometimes A train may also stop at the middle station as terminal station like Euclid Av. Please refer to MTA official website and broadcast in this case.
+ - Language follows system. Support Chinese and English.
 
 
 <span id="CN"></span>
@@ -160,7 +161,7 @@ let myF1="**(40.6922632, -73.9868766)**" //默认：Jay St MetroTech
  - 受系统限制，小组件可能**不会**立即刷新内容。可设置为手动点击重新运行脚本。
  - 好在有计时器帮忙！您看到的时间显示是相对于上次刷新时间的差值，可以方便地找到最近时间的列车。
  - 请注意！由于简化了方向，因此您**无法**看到多个终点站的区别。例如，A车可能有多个终点站，包括Ozone Park–Lefferts Blvd和Far Rockaway-Mott Av等。有时候A列车也可能在中间站停靠作为终点，例如Euclid Av。在这种情况下，请参考MTA官方网站和广播。
-
+ - 语言随系统变动，支持中文和英语。
 
 
 
