@@ -76,6 +76,16 @@ Edit the variable myF1/myF2/myF3.
 
 let myF1="**(40.6922632, -73.9868766)**" //default: Jay St MetroTech
 
+
+# Dark Mode
+The default is Dark Mode.
+
+If you want to switch, please locate the "colorModeSetting" variable at the beginning of the script and modify it.
+
+- 0 → Automatic
+- 1 → Fixed Light Mode
+- 2 → Fixed Dark Mode
+
 # Misc
  - Subject to the system limit, the widget might **NOT** fresh the content as soon as we want. You can click to refresh.
  - The good news is the timer you see shows the relative time to the last refresh time which will help you refer to offset by calculating.
@@ -156,6 +166,21 @@ let myF1="**(40.6922632, -73.9868766)**" //default: Jay St MetroTech
 🌰例如：
 
 let myF1="**(40.6922632, -73.9868766)**" //默认：Jay St MetroTech
+
+
+# 深色模式
+默认为深色模式。
+
+如果你想切换颜色显示，请在脚本最前面找到变量“colorModeSetting”修改。
+
+- 0 → 自动
+
+- 1 → 固定浅色
+
+- 2 → 固定深色
+
+
+
 
 # 还有一些事......
  - 受系统限制，小组件可能**不会**立即刷新内容。可设置为手动点击重新运行脚本。

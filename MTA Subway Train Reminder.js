@@ -3,10 +3,10 @@
 // icon-color: deep-gray; icon-glyph: bell;
 
 
-// Silver 23.10.4
-// Version 2.0
+// Silver 23.10.6
+// Version 3.0
 // Display NYC Subway Station Train Schedule in Simplified Two Directions.
-
+//备注：当前还未能做到视觉居中，改成helvetica字体后发现数字、字母需要微调才能做成视觉居中。现在是大概统一调了下位置。后面有时间做。
 
 
 //Two Favorite Location Here
@@ -15,6 +15,29 @@ let myF1="(40.6922632, -73.9868766)" //default: Jay St MetroTech
 let myF2="(40.755356, -73.987042)" //default: Times Sq–42 St
 let myF3="(40.7468117, -73.8910024)" //default: Jackson Hts-Roosevelt Av
 
+let colorModeSetting = 2 //0: Auto, 1 Bright, 2 Dark
+
+
+///////////////////////////////////////////////////
+
+///////////////////////////////////////////////////
+
+///////////////////////////////////////////////////
+
+
+
+
+
+
+let colorIsDark = true
+if(colorModeSetting==0){
+  colorIsDark = Device.isUsingDarkAppearance()?true:false
+
+}else if (colorModeSetting==1){
+  colorIsDark = false
+}else if (colorModeSetting==2){
+  colorIsDark = true
+}
 
 
 // 创建一个小组件
@@ -189,10 +212,18 @@ let strNow = ""
 if (systemLanguage.startsWith("zh")) {
   // 执行操作A，例如
   strLan="分"
-  strNow="现在"
+  strNow=" 现在"
 } else {
-  strLan="Min"
-  strNow="Due"
+  if(widgetSize==="small"){
+    strLan = "m"
+    strNow=" NOW"
+  }else{
+    strLan="min"
+    // strNow=" N-O-W"
+    strNow=" *NOW*"
+  }
+  
+  
 }
 // 解析并格式化时间函数
 function formatTime(timeString) {
@@ -200,8 +231,12 @@ function formatTime(timeString) {
   const minutesRemaining = Math.floor((time - now) / (60 * 1000));
   if(minutesRemaining ===0){
     return strNow;
+  }else if(minutesRemaining<0){
+    return `${minutesRemaining} ${strLan}`
   }
-  return `${minutesRemaining} ${strLan}`;
+  // return `${minutesRemaining} ${strLan}`;
+  //如果是单位数字，那么多返回一个空格在前面方便对齐
+  return minutesRemaining < 10 ? ` ${minutesRemaining} ${strLan}` : `${minutesRemaining} ${strLan}`;
 }
 
 
@@ -322,6 +357,41 @@ const routeColors = {
 };
 
 
+//为了适应浅色背景修改了黄色为官方正色
+const routeColorsBright = {
+  "A": Color.blue(),
+  "C": Color.blue(),
+  "E": Color.blue(),
+  "B": new Color("FD7023"), // 橙色
+  "D": new Color("FD7023"), // 橙色
+  "F": new Color("FD7023"), // 橙色
+  "FX": new Color("FD7023"), // 橙色
+  "M": new Color("FD7023"), // 橙色
+  "N": new Color("EEAE00"),
+  "Q": new Color("EEAE00"),
+  "R": new Color("EEAE00"),
+  "W": new Color("EEAE00"),
+  "S": new Color("808183"),
+  "FS": new Color("808183"), // 银色，有可能不是这个，有可能是SF
+  "H": new Color("808183"), // 银色，SR的代号
+  "L": new Color("a7a9ac"), // 深灰色
+  "1": new Color("ee352e"),
+  "2": new Color("ee352e"),
+  "3": new Color("ee352e"),
+  "4": new Color("00933c"),
+  "5": new Color("00933c"),
+  "6": new Color("00933c"),
+  "6X": new Color("00933c"),
+  "7": new Color("b933ad"),
+  "7X": new Color("b933ad"),
+  "J": new Color("996633"),// 棕色
+  "Z": new Color("996633"), // 棕色
+  // "SI": Color.cyan(), // 天蓝色
+  "SI": Color.blue(),
+  "G": new Color("6cbe45") // 亮绿色
+};
+
+
 // // 定义线路颜色映射：安全色系列
 // const routeColors = {
 //   "A": Color.blue(),
@@ -393,14 +463,23 @@ const routeColors = {
 // 添加站点名称到小组件
 if(widgetSize!="extraLarge"){
   const titleText = widget.addText(`${stationName}`);
-  titleText.textColor = Color.white();
+  
+  if (colorIsDark) {
+    titleText.textColor = Color.white();
+  }else{
+    titleText.textColor = Color.black();
+  }
+  
   titleText.centerAlignText();
   if (widgetSize === "small") {
-    titleText.font = Font.boldSystemFont(14);
+    // titleText.font = Font.boldSystemFont(14);
+    titleText.font=new Font("Helvetica-Bold",14);
   }else if(widgetSize==="medium"){
-    titleText.font = Font.boldSystemFont(20);
+    // titleText.font = Font.boldSystemFont(20);
+    titleText.font=new Font("Helvetica-Bold",18);
   }else{
-    titleText.font = Font.boldSystemFont(30);
+    // titleText.font = Font.boldSystemFont(30);
+    titleText.font=new Font("Helvetica-Bold",28);
   }
   // if(widgetSize!="medium"){
   //   widget.addSpacer()
@@ -415,6 +494,117 @@ widget.addSpacer(5)
 
 if(widgetSize==="large"){
   //以下内容复制来自extralarge的部分并微调，暂未合并为单独模块调用，后面有时间再搞
+  
+  
+  
+  
+  
+  
+  //线路显示第一种写法，后不用了。
+  // const routeStack = widget.addStack()
+  // routeStack.addSpacer()
+  
+  
+  // // // 遍历并依次显示路线，并设置颜色
+  // // routes.forEach(function(route) {
+  // //   var text = routeStack.addText(route);
+  // //   text.textColor = routeColors[route];
+  // // });
+
+  // // 遍历并依次显示路线，并设置颜色和背景圆形
+  // routes.forEach(function(route) {
+  //   var routeText = route === "H" ? "SR" : route === "FS" ? "SF" : route === "SI" ? "SIR" : route;
+    
+  //   var circle = routeStack.addStack();
+    
+  //   // circle.layoutHorizontally();
+  //   circle.layoutVertically();
+  //   circle.addSpacer(4);
+  //   circle.backgroundColor = routeColors[route];
+  //   circle.cornerRadius = 15;
+  //   circle.size = new Size(30, 30);
+
+  //   // 加了边框不好看，取消了。
+  //   // circle.borderWidth = 3; // 边框宽度为2个单位
+  //   // circle.borderColor = new Color("#FFFFFF"); // 边框颜色为白色
+    
+
+  //   if (routeText.length === 2) {
+
+  //     //想把X做小显示，但是不好看算了。
+  //     // var text = circle.addText(routeText.charAt(0));
+  //     // text.textColor = Color.white();
+  //     // text.font = Font.boldSystemFont(25);
+  //     // text.centerAlignText()
+      
+  //     // var secondChar = circle.addText(routeText.charAt(1));
+  //     // secondChar.font = Font.boldSystemFont(15); // 使用5号字体
+  //     // secondChar.centerAlignText()
+      
+  //     circle.layoutHorizontally();
+  //     // circle.addSpacer(1)
+      
+  //     const circleInside = circle.addStack()
+  //     circleInside.layoutVertically();
+  //     circleInside.addSpacer(4.5)
+  //     var text = circleInside.addText(routeText);
+  //     text.textColor = route === "N" || route === "Q" || route === "R" || route === "W" ? Color.black() : Color.white();
+  //     // text.font = Font.thinSystemFont(20);
+  //     // text.font = Font.boldSystemFont(18);
+  //     text.font = new Font("Helvetica-Bold",18);
+  //     text.centerAlignText()
+  //     circleInside.addSpacer(1)
+  //     circle.addSpacer(1)
+
+  //   }else if (routeText.length===3){
+  //     circle.layoutHorizontally();
+  //     circle.centerAlignContent();
+  //     // circle.addSpacer(1)
+      
+  //     const circleInside = circle.addStack()
+  //     circleInside.layoutVertically();
+  //     circleInside.centerAlignContent
+  //     // circleInside.addSpacer(1)
+  //     var text = circleInside.addText(routeText);
+  //     text.textColor = route === "N" || route === "Q" || route === "R" || route === "W" ? Color.black() : Color.white();
+  //     // text.font = Font.thinSystemFont(20);
+  //     // text.font = Font.boldSystemFont(16);
+  //     text.font = new Font("Helvetica-Bold",16);
+  //     text.centerAlignText()
+  //     // circleInside.addSpacer(1)
+  //     // circle.addSpacer(1)
+  //   } else {
+  //     // circle.addSpacer(2)
+  //     var text = circle.addText(routeText);
+  //     text.textColor = route === "N" || route === "Q" || route === "R" || route === "W" ? Color.black() : Color.white();
+  //     // text.font = Font.boldSystemFont(25);
+  //     text.font = new Font("Helvetica-Bold",25);
+  //     text.centerAlignText();
+  //     text.lineLimit = 5;
+
+  //     // circle.addSpacer();
+      
+  //     // circle.addText(" "); // 空文本用于占位
+  //     // circle.setPadding(0,10,0,10)
+  //     // routeStack.addSpacer()
+
+      
+  //   }
+  //   var circleGap = routeStack.addStack();
+  //     circleGap.size = new Size(5, 30);
+
+
+    
+  // });
+
+
+
+
+  // routeStack.addSpacer()
+
+
+
+  //拷贝自后面的第二种写法。有时间打包成方法。
   const routeStack = widget.addStack()
   routeStack.addSpacer()
   
@@ -433,7 +623,12 @@ if(widgetSize==="large"){
     
     // circle.layoutHorizontally();
     // circle.addSpacer();
-    circle.backgroundColor = routeColors[route];
+    if (colorIsDark) {
+      circle.backgroundColor = routeColors[route];
+    }else{
+      circle.backgroundColor = routeColorsBright[route];
+    }
+    
     circle.cornerRadius = 15;
     circle.size = new Size(30, 30);
 
@@ -459,11 +654,12 @@ if(widgetSize==="large"){
       
       const circleInside = circle.addStack()
       circleInside.layoutVertically();
-      circleInside.addSpacer(3)
+      circleInside.addSpacer(4.5)
       var text = circleInside.addText(routeText);
       text.textColor = route === "N" || route === "Q" || route === "R" || route === "W" ? Color.black() : Color.white();
       // text.font = Font.thinSystemFont(20);
-      text.font = Font.boldSystemFont(20);
+      // text.font = Font.boldSystemFont(18);
+      text.font = new Font("Helvetica-Bold",18);
       text.centerAlignText()
       circleInside.addSpacer(1)
       circle.addSpacer(1)
@@ -475,22 +671,30 @@ if(widgetSize==="large"){
       
       const circleInside = circle.addStack()
       circleInside.layoutVertically();
-      circleInside.centerAlignContent
+      // circleInside.centerAlignContent
       // circleInside.addSpacer(1)
       var text = circleInside.addText(routeText);
       text.textColor = route === "N" || route === "Q" || route === "R" || route === "W" ? Color.black() : Color.white();
       // text.font = Font.thinSystemFont(20);
-      text.font = Font.boldSystemFont(16);
+      // text.font = Font.boldSystemFont(16);
+      text.font = Font.boldSystemFont(16)
+
       text.centerAlignText()
       // circleInside.addSpacer(1)
       // circle.addSpacer(1)
     } else {
-      var text = circle.addText(routeText);
+      const circleInside = circle.addStack()
+      circleInside.layoutVertically();
+      circleInside.addSpacer(2.5)
+      // circle.addSpacer(2)
+      var text = circleInside.addText(routeText);
       text.textColor = route === "N" || route === "Q" || route === "R" || route === "W" ? Color.black() : Color.white();
-      text.font = Font.boldSystemFont(25);
+      // text.font = Font.boldSystemFont(25);
+      // text.font = Font.thinSystemFont(25);
+      text.font = new Font("Helvetica-Bold",22);
       text.centerAlignText();
       text.lineLimit = 5;
-
+      circleInside.addSpacer(1)
       // circle.addSpacer();
       
       // circle.addText(" "); // 空文本用于占位
@@ -559,20 +763,69 @@ if (widgetSize === "small") {
   displayNumber = 10
 }
 station.N.slice(0, displayNumber).forEach(train => {
-  const routeColor = routeColors[train.route] || Color.white();
+  var routeColor
+  if (colorIsDark) {
+     routeColor = routeColors[train.route] || Color.white();
+  }else{
+     routeColor = routeColorsBright[train.route] || Color.black();
+  }
   const formattedTime = formatTime(train.time);
   // const trainTextItem = leftStack.addText(`● ${train.route}: ${formattedTime}`);
-  const trainTextItem = leftStack.addText(`▲ ${train.route}: ${formattedTime}`);
-  trainTextItem.textColor = routeColor;
-  if (widgetSize === "small") {
-    trainTextItem.font = Font.regularMonospacedSystemFont(10);
-  }else if(widgetSize==="medium"){
-    trainTextItem.font = Font.regularMonospacedSystemFont(16);
-  }else if(widgetSize==="large"){
-    trainTextItem.font = Font.regularMonospacedSystemFont(20);
-  }else{
-    trainTextItem.font = Font.regularMonospacedSystemFont(22);
+  // const trainTextItem = leftStack.addText(`▲ ${train.route}: ${formattedTime}`);
+  //◆△▲◇
 
+    // const trainTextItem = rightStack.addText(`▼${train.route}:${formattedTime}`);
+    var routeText = train.route === "H" ? "SR" : train.route === "FS" ? "SF" : train.route === "SI" ? "SI" : train.route;
+    
+    var extraStr = " "
+    // if(widgetSize==="medium"){
+    //   extraStr = " "
+    // }
+
+    const trainTextItem = routeText.length>1 
+    ? leftStack.addText(`▲${routeText}:${formattedTime}${extraStr}`) 
+    : leftStack.addText(` ▲${routeText}:${formattedTime}${extraStr}`);
+
+  // const trainTextItem = train.route.length>1 
+  // ? leftStack.addText(`▲${train.route}:${formattedTime}`) 
+  // : leftStack.addText(` ▲${train.route}:${formattedTime}`);
+  trainTextItem.textColor = routeColor;
+  // if (widgetSize === "small") {
+  //   trainTextItem.font = Font.regularMonospacedSystemFont(10);
+  // }else if(widgetSize==="medium"){
+  //   trainTextItem.font = Font.regularMonospacedSystemFont(16);
+  // }else if(widgetSize==="large"){
+  //   trainTextItem.font = Font.regularMonospacedSystemFont(20);
+  // }else{
+  //   trainTextItem.font = Font.regularMonospacedSystemFont(22);
+
+  // }
+  // if (widgetSize === "small") {
+  //   // trainTextItem.font = Font.regularMonospacedSystemFont(10);
+  //   trainTextItem.font = new Font ("Menlo-Regular", 10);
+  // }else if(widgetSize==="medium"){
+  //   // trainTextItem.font = Font.regularMonospacedSystemFont(16);
+  //   trainTextItem.font = new Font ("Menlo-Regular", 16);
+  // }else if(widgetSize==="large"){
+  //   // trainTextItem.font = Font.regularMonospacedSystemFont(20);
+  //   trainTextItem.font = new Font ("Menlo-Regular", 20);
+  // }else{
+  //   // trainTextItem.font = Font.regularMonospacedSystemFont(22);
+  //   trainTextItem.font = new Font ("Menlo-Regular", 22);
+
+  // }
+  if (widgetSize === "small") {
+    // trainTextItem.font = Font.regularMonospacedSystemFont(10);
+    trainTextItem.font = new Font ("CourierNewPS-BoldMT", 11);
+  }else if(widgetSize==="medium"){
+    // trainTextItem.font = Font.regularMonospacedSystemFont(16);
+    trainTextItem.font = new Font ("CourierNewPS-BoldMT", 16);
+  }else if(widgetSize==="large"){
+    // trainTextItem.font = Font.regularMonospacedSystemFont(20);
+    trainTextItem.font = new Font ("CourierNewPS-BoldMT", 20);
+  }else{
+    // trainTextItem.font = Font.regularMonospacedSystemFont(22);
+    trainTextItem.font = new Font ("CourierNewPS-BoldMT", 22);
   }
 });
 
@@ -592,9 +845,15 @@ if(widgetSize==="extraLarge"){
   nameStack.addSpacer()
   //scriptable
   titleText = nameStack.addText(`${stationName}`);
-  titleText.textColor = Color.white();
+  // titleText = nameStack.addText("Times Sq-42 St")
+  if (colorIsDark) {
+    titleText.textColor = Color.white();
+  }else{
+    titleText.textColor = Color.black();
+  }
   titleText.centerAlignText();
-  titleText.font = Font.boldSystemFont(36);
+  // titleText.font = Font.boldSystemFont(36);
+  titleText.font = new Font("Helvetica-Bold",34);
   nameStack.addSpacer()
 
   middleStack.addSpacer(8)
@@ -604,6 +863,9 @@ if(widgetSize==="extraLarge"){
 
 
   const routeStack = middleStack.addStack()
+
+
+  //第二种线路显示的写法，后都用这个。
   routeStack.addSpacer()
   
   
@@ -621,7 +883,14 @@ if(widgetSize==="extraLarge"){
     
     // circle.layoutHorizontally();
     // circle.addSpacer();
+
+  
+  if (colorIsDark) {
     circle.backgroundColor = routeColors[route];
+  }else{
+    circle.backgroundColor = routeColorsBright[route];
+  }
+    
     circle.cornerRadius = 15;
     circle.size = new Size(30, 30);
 
@@ -647,11 +916,12 @@ if(widgetSize==="extraLarge"){
       
       const circleInside = circle.addStack()
       circleInside.layoutVertically();
-      circleInside.addSpacer(3)
+      circleInside.addSpacer(4.5)
       var text = circleInside.addText(routeText);
       text.textColor = route === "N" || route === "Q" || route === "R" || route === "W" ? Color.black() : Color.white();
       // text.font = Font.thinSystemFont(20);
-      text.font = Font.boldSystemFont(20);
+      // text.font = Font.boldSystemFont(18);
+      text.font = new Font("Helvetica-Bold",18);
       text.centerAlignText()
       circleInside.addSpacer(1)
       circle.addSpacer(1)
@@ -663,22 +933,30 @@ if(widgetSize==="extraLarge"){
       
       const circleInside = circle.addStack()
       circleInside.layoutVertically();
-      circleInside.centerAlignContent
+      // circleInside.centerAlignContent
       // circleInside.addSpacer(1)
       var text = circleInside.addText(routeText);
       text.textColor = route === "N" || route === "Q" || route === "R" || route === "W" ? Color.black() : Color.white();
       // text.font = Font.thinSystemFont(20);
-      text.font = Font.boldSystemFont(16);
+      // text.font = Font.boldSystemFont(16);
+      text.font = Font.boldSystemFont(16)
+
       text.centerAlignText()
       // circleInside.addSpacer(1)
       // circle.addSpacer(1)
     } else {
-      var text = circle.addText(routeText);
+      const circleInside = circle.addStack()
+      circleInside.layoutVertically();
+      circleInside.addSpacer(2.5)
+      // circle.addSpacer(2)
+      var text = circleInside.addText(routeText);
       text.textColor = route === "N" || route === "Q" || route === "R" || route === "W" ? Color.black() : Color.white();
-      text.font = Font.boldSystemFont(25);
+      // text.font = Font.boldSystemFont(25);
+      // text.font = Font.thinSystemFont(25);
+      text.font = new Font("Helvetica-Bold",22);
       text.centerAlignText();
       text.lineLimit = 5;
-
+      circleInside.addSpacer(1)
       // circle.addSpacer();
       
       // circle.addText(" "); // 空文本用于占位
@@ -706,7 +984,7 @@ if(widgetSize==="extraLarge"){
   strStack.addSpacer()
 
   if (systemLanguage.startsWith("zh")) {
-    str = strStack.addText("距上次更新过去了")
+    str = strStack.addText("距上次更新")
   } else {
     str = strStack.addText("Last Update")
   }
@@ -734,18 +1012,22 @@ if(widgetSize!="medium"){
 
 
 if(widgetSize==="medium"){
+  myStack.addSpacer(10)
   const temp = myStack.addStack()
+  
   temp.layoutVertically();
   temp.centerAlignContent();
-  temp.size = new Size(100, 0);
+  temp.size = new Size(45, 0);
+  // temp.setPadding = (0,15,0,15)
   const d = temp.addDate(now)
   d.applyRelativeStyle();
   d.textColor = Color.gray();
   d.font = Font.footnote();
   d.centerAlignText();
   // d.padding(10,5,10,5)
+  // d.lineLimit= 3;
 
-
+  myStack.addSpacer(10)
 }
 
 
@@ -756,20 +1038,41 @@ const rightStack = myStack.addStack();
 rightStack.layoutVertically();
 // rightStack.addText(`南向列车`);
 station.S.slice(0, displayNumber).forEach(train => {
-  const routeColor = routeColors[train.route] || Color.white();
+  // const routeColor = routeColors[train.route] || Color.white();
+  var routeColor
+  if (colorIsDark) {
+     routeColor = routeColors[train.route] || Color.white();
+  }else{
+     routeColor = routeColorsBright[train.route] || Color.black();
+  }
   const formattedTime = formatTime(train.time);
-  const trainTextItem = rightStack.addText(`▼ ${train.route}: ${formattedTime}`);
+  // const trainTextItem = rightStack.addText(`▼ ${train.route}: ${formattedTime}`);
+  
+  
+  // const trainTextItem = rightStack.addText(`▼${train.route}:${formattedTime}`);
+  // var routeText = route === "H" ? "SR" : route === "FS" ? "SF" : route === "SI" ? "SI" : route;
+  // const trainTextItem = rightStack.addText(`▼${routeText}:${formattedTime}`);
+
+
+  var routeText = train.route === "H" ? "SR" : train.route === "FS" ? "SF" : train.route === "SI" ? "SI" : train.route;
+  const trainTextItem = routeText.length>1 
+  ? rightStack.addText(`▲${routeText}:${formattedTime} `) 
+  : rightStack.addText(` ▲${routeText}:${formattedTime} `);
 
   trainTextItem.textColor = routeColor;
   // trainTextItem.font = Font.systemFont(14);
   if (widgetSize === "small") {
-    trainTextItem.font = Font.regularMonospacedSystemFont(10);
+    // trainTextItem.font = Font.regularMonospacedSystemFont(10);
+    trainTextItem.font = new Font ("CourierNewPS-BoldMT", 11);
   }else if(widgetSize==="medium"){
-    trainTextItem.font = Font.regularMonospacedSystemFont(16);
+    // trainTextItem.font = Font.regularMonospacedSystemFont(16);
+    trainTextItem.font = new Font ("CourierNewPS-BoldMT", 16);
   }else if(widgetSize==="large"){
-    trainTextItem.font = Font.regularMonospacedSystemFont(20);
+    // trainTextItem.font = Font.regularMonospacedSystemFont(20);
+    trainTextItem.font = new Font ("CourierNewPS-BoldMT", 20);
   }else{
-    trainTextItem.font = Font.regularMonospacedSystemFont(22);
+    // trainTextItem.font = Font.regularMonospacedSystemFont(22);
+    trainTextItem.font = new Font ("CourierNewPS-BoldMT", 22);
 
   }
 });
@@ -886,7 +1189,15 @@ widget.addSpacer()
 
 
 
-widget.backgroundColor = new Color("242424");
+if (colorIsDark) {
+  // bgColor = Color.black()
+  widget.backgroundColor = new Color("242424");
+}else{
+  // widget.backgroundColor = new Color("DBDBDB");
+  widget.backgroundColor = new Color("F0F0F0");
+}
+
+
 const padding = 10;
 widget.setPadding(padding, padding, padding, padding);
 
