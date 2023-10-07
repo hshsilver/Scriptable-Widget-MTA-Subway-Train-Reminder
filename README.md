@@ -6,6 +6,8 @@
 # Scriptable Widget MTA Subway Train Reminder
  Scriptable Widget MTA Subway Train Reminder
 
+Keywords: iOS, iPadOS, Widget, Scriptable, NYC MTA Subway, New York City Subway
+
  by Silver
 
 # Inspiration
@@ -99,6 +101,8 @@ If you want to switch, please locate the "colorModeSetting" variable at the begi
 
 # Scriptable小组件MTA地铁列车提醒
  Scriptable小组件MTA地铁列车提醒
+
+关键词: iOS, iPadOS, 小组件, Scriptable, 纽约地铁
 
  西尔弗制作
 
