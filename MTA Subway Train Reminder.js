@@ -1056,8 +1056,8 @@ station.S.slice(0, displayNumber).forEach(train => {
 
   var routeText = train.route === "H" ? "SR" : train.route === "FS" ? "SF" : train.route === "SI" ? "SI" : train.route;
   const trainTextItem = routeText.length>1 
-  ? rightStack.addText(`▲${routeText}:${formattedTime} `) 
-  : rightStack.addText(` ▲${routeText}:${formattedTime} `);
+  ? rightStack.addText(`▼${routeText}:${formattedTime} `) 
+  : rightStack.addText(` ▼${routeText}:${formattedTime} `);
 
   trainTextItem.textColor = routeColor;
   // trainTextItem.font = Font.systemFont(14);
